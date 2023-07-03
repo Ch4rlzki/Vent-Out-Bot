@@ -10,17 +10,30 @@ app.listen(port, () => {
     console.log(`Express server is listening to ${port}`);
 });
 
-const { Client, Events, GatewayIntentBits, REST, Routes, EmbedBuilder } = require("discord.js");
+const { Client, Events, GatewayIntentBits, REST, Routes, EmbedBuilder, ActivityType } = require("discord.js");
 require("dotenv").config();
 const token = process.env["token"];
 const clientId = process.env["clientId"];
+
+const status = {
+    isUpdating: false
+}
 
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMembers
-    ]
+    ],
+    presence: {
+        activities: [
+            {
+                name: status.isUpdating ? "Updating" : "/vent",
+                type: ActivityType.Listening
+            }
+        ],
+        status: status.isUpdating ? "dnd" : "online",
+    }
 });
 
 client.once(Events.ClientReady, (c) => {
