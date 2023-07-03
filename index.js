@@ -1,9 +1,13 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const path = require("path");
+
+app.use(express.static("views"));
 
 app.all("/", (req, res) => {
-    res.send("<h1 style='font-family: Segoe UI;'>Bot is online!</h1>");
+    res.sendFile(path.join(__dirname, "views", "main", "index.html"))
+    console.log("Someone pinged!");
 });
 
 app.listen(port, () => {
@@ -16,7 +20,7 @@ const token = process.env["token"];
 const clientId = process.env["clientId"];
 
 const status = {
-    isUpdating: false
+    isUpdating: true
 }
 
 const client = new Client({
